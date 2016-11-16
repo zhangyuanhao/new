@@ -1,0 +1,59 @@
+@*
+ * Copyright (c) Factchina Inc, 2015-2016
+ *
+ * This unpublished material is proprietary to Factchina Inc.
+ * All rights reserved. The methods and techniques described herein
+ * are considered trade secrets and/or confidential.
+ * Reproduction or distribution, in whole or in part,
+ * is forbidden except by express written permission of Factchina Inc.
+ *@
+
+@()(
+implicit req: UserRequest[_], messages: Messages, env: Environment)
+
+@import common._
+@import helper._
+
+@layouts.base(InstitutionsCtrl.msg("edit.title")){
+
+<div ng-controller="EventController">
+  Root scope
+  <tt>MyEvent</tt> count:{{count}}
+  <ul>
+    <li ng-repeat="i in [1]" ng-controller="EventController">
+      <button ng-click="$emit('MyEvent')">$emit('MyEvent')</button>
+      <button ng-click="$broadcast('MyEvent')">$broadcast('MyEvent')</button>
+        <br> Middle scope
+         <tt>MyEvent</tt> count :{{count}}
+        <ul>
+        <li ng-repeat="item in [1, 2]" ng-controller="EventController">
+        leaf scope
+        <tt>MyEvent</tt>  count : {{count}}
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+}()(
+  libs.webjars("js", "angular-resource"),
+  libs.assets("js", "api.helper"),
+  libs.assets("js", "api_internal/institutions"),
+  libs.assets("js", "ui.parts"),
+  libs.assets("js", "ui.common"),
+  libs.assets("js", "ui.address"),
+  libs.assets("js", "institutions/test_01"),
+  controller
+)
+
+@controller = {
+  <script>
+    test_01.run(['Test01Singleton', function(Test01Singleton) {
+      Test01Singleton.load("123456");
+      Test01Singleton.dictionary = {
+        'msg.saved'   : '@InstitutionsCtrl.message("msg.saved")',
+        'msg.created' : '@InstitutionsCtrl.message("msg.created")'
+      };
+    }]);
+  </script>
+}
